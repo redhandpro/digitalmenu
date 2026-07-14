@@ -1,34 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{{ business.name }}</title>
+
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            margin-bottom: 25px;
+        }
+
+        .category h2 {
+            margin-bottom: 10px;
+        }
+
+        .product {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-weight: bold;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-<h1>{{ business.name }}</h1>
+<div class="container">
 
-<p>{{ business.address }}</p>
 
-<hr>
+<div class="header">
+
+<h1>
+{{ business.name }}
+</h1>
+
+<p>
+{{ business.address }}
+</p>
+
+<p>
+{{ business.phone }}
+</p>
+
+</div>
+
 
 {% for category in categories %}
 
-<h2>{{ category.name }}</h2>
+<div class="category">
+
+<h2>
+{{ category.name }}
+</h2>
+
 
 {% for product in category.products.all %}
 
-<h3>{{ product.name }}</h3>
 
-<p>{{ product.description }}</p>
+<div class="product">
 
-<p>{{ product.price }}</p>
+<h3>
+{{ product.name }}
+</h3>
 
-<hr>
+
+<p>
+{{ product.description }}
+</p>
+
+
+<div class="price">
+{{ product.price }} تومان
+</div>
+
+
+</div>
+
 
 {% endfor %}
 
+</div>
+
+
 {% endfor %}
+
+
+</div>
 
 </body>
+
 </html>
