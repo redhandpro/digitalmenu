@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ business.name }}</title>
+</head>
+
+<body>
+
+<h1>{{ business.name }}</h1>
+
+<p>{{ business.address }}</p>
+
+<hr>
+
+{% for category in categories %}
+
+<h2>{{ category.name }}</h2>
+
+{% for product in category.products.all %}
+
+<h3>{{ product.name }}</h3>
+
+<p>{{ product.description }}</p>
+
+<p>{{ product.price }}</p>
+
+<hr>
+
+{% endfor %}
+
+{% endfor %}
+
+</body>
+</html>
