@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ثبت نام</title>
+</head>
+
+<body>
+
+<h1>ثبت نام صاحب کسب و کار</h1>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        ثبت نام
+    </button>
+
+</form>
+
+</body>
+</html>
