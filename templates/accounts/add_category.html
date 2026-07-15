@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>افزودن دسته بندی</title>
+</head>
+
+<body>
+
+<h1>
+افزودن دسته بندی منو
+</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">
+ذخیره
+</button>
+
+</form>
+
+</body>
+</html>

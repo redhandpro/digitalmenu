@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبورد</title>
+</head>
+<body>
+
+<h1>{{ business.name }}</h1>
+
+<p>آدرس: {{ business.address }}</p>
+
+<p>تلفن: {{ business.phone }}</p>
+
+<hr>
+
+<p>
+<a href="/menu/{{ business.slug }}/">
+مشاهده منو
+</a>
+</p>
+
+<p>
+<a href="/qr/{{ business.slug }}/">
+دانلود QR
+</a>
+</p>
+<hr>
+
+<h2>
+دسته بندی های منو
+</h2>
+
+
+{% for category in categories %}
+
+<p>
+{{ category.name }}
+</p>
+
+{% empty %}
+
+<p>
+هنوز دسته بندی ساخته نشده
+</p>
+
+{% endfor %}
+
+
+<a href="/accounts/add-category/">
+افزودن دسته بندی جدید
+</a>
+</body>
+</html>

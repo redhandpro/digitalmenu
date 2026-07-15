@@ -10,4 +10,21 @@ urlpatterns = [
         name="register"
     ),
 
+    path(
+        "create-business/",
+        views.create_business,
+        name="create_business"
+    ),
+
+    path(
+        "dashboard/",
+        views.dashboard,
+        name="dashboard"
+    ),
+    path(
+    "add-category/",
+    views.add_category,
+    name="add_category"
+),
+
 ]
