@@ -33,7 +33,7 @@ class Business(models.Model):
         auto_now_add=True
     )
 
-    def str(self):
+    def __str__(self):
         return self.name
 
 
@@ -47,7 +47,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100)
 
-    def str(self):
+    def __str__(self):
         return self.name
 
 
@@ -80,5 +80,5 @@ class Product(models.Model):
         default=True
     )
 
-    def str(self):
+    def __str__(self):
         return self.name

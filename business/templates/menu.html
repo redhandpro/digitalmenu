@@ -58,6 +58,11 @@
 
 <div class="header">
 
+{% if business.logo %}
+<img src="{{ business.logo.url }}"
+style="width:120px;height:120px;object-fit:cover;border-radius:50%;">
+{% endif %}
+
 <h1>
 {{ business.name }}
 </h1>
@@ -86,6 +91,11 @@
 
 
 <div class="product">
+    
+    {% if product.image %}
+<img src="{{ product.image.url }}"
+style="width:100%;height:200px;object-fit:cover;border-radius:12px;">
+{% endif %}
 
 <h3>
 {{ product.name }}
@@ -117,4 +127,4 @@
 
 </body>
 
-</html>
+</html>  
