@@ -30,6 +30,41 @@
 <h2>
 دسته بندی های منو
 </h2>
+<hr>
+
+<h2>
+محصولات من
+</h2>
+
+{% for product in products %}
+
+<p>
+{{ product.name }}
+-
+{{ product.price }}
+</p>
+<a href="/accounts/delete-product/{{ product.id }}/">
+حذف
+</a>
+<a href="{% url 'toggle_product' product.id %}">
+    {% if product.available %}
+        ناموجود کن ❌
+    {% else %}
+        موجود کن ✅
+    {% endif %}
+</a>
+
+<a href="/accounts/edit-product/{{ product.id }}/">
+ویرایش
+</a>
+
+{% empty %}
+
+<p>
+هنوز محصولی ثبت نشده
+</p>
+
+{% endfor %}
 
 
 {% for category in categories %}
@@ -49,6 +84,9 @@
 
 <a href="/accounts/add-category/">
 افزودن دسته بندی جدید
+</a>
+<a href="{% url 'settings_business' %}">
+تنظیمات کسب‌وکار ⚙️
 </a>
 </body>
 </html>

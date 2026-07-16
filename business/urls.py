@@ -10,10 +10,17 @@ urlpatterns = [
         name="menu"
     ),
 
-    path(
-        "qr/<slug:slug>/",
-        views.qr_code_view,
-        name="qr"
-    ),
+  path(
+    "qr/<slug:slug>/",
+    views.qr_view,
+    name="qr"
+),
+
+
+path(
+    "qr-image/<slug:slug>/",
+    views.qr_image,
+    name="qr_image"
+),
 
 ]

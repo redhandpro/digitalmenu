@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>QR {{ business.name }}</title>
+
+<style>
+
+body{
+    font-family:tahoma;
+    background:#f5f5f5;
+    text-align:center;
+    padding:30px;
+}
+
+.box{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+}
+
+img{
+    width:250px;
+}
+a{
+    display:inline-block;
+    background:#222;
+    color:white;
+    padding:10px 25px;
+    border-radius:10px;
+    text-decoration:none;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="box">
+
+<h1>
+{{ business.name }}
+</h1>
+
+<p>
+منوی دیجیتال
+</p>
+
+
+<img src="{% url 'qr_image' business.slug %}">
+
+<a href="{% url 'qr_image' business.slug %}" download>
+دانلود QR
+</a>
+
+<p>
+این QR را برای میز یا ورودی کافه چاپ کنید
+</p>
+
+
+</div>
+
+</body>
+
+</html>

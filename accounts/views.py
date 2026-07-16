@@ -2,71 +2,39 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
-from .forms import BusinessForm, CategoryForm
 
-from business.models import Business
-
+from business.models import Business, Category, Product
+from .forms import BusinessForm, CategoryForm, ProductForm
 
 
 def register_view(request):
+    form = UserCreationForm(request.POST or None)
 
-    if request.method == "POST":
+    if form.is_valid():
+        form.save()
+        return redirect("login")
 
-        form = UserCreationForm(request.POST)
-
-        if form.is_valid():
-
-            form.save()
-
-            return redirect("login")
-
-    else:
-        form = UserCreationForm()
+    return render(request, "accounts/register.html", {
+        "form": form
+    })
 
 
-    return render(
-        request,
-        "accounts/register.html",
-        {
-            "form": form
-        }
-    )
 @login_required
 def create_business(request):
+    form = BusinessForm(request.POST or None, request.FILES or None)
 
-    if request.method == "POST":
+    if form.is_valid():
+        business = form.save(commit=False)
+        business.owner = request.user
+        business.slug = slugify(business.name)
+        business.save()
+        return redirect("dashboard")
 
-        form = BusinessForm(
-            request.POST,
-            request.FILES
-        )
-        Vif form.is_valid():
-
-            business = form.save(commit=False)
-
-            business.owner = request.user
-
-            business.slug = slugify(
-                business.name
-            )
-
-            business.save()
-
-            return redirect(
-                "dashboard"
-            )
-
-    else:
-        form = BusinessForm()
+    return render(request, "accounts/create_business.html", {
+        "form": form
+    })
 
 
-    return render(
-        request,
-        "accounts/create_business.html",
-        {
-            "form": form
-        }
-    )
 @login_required
 def dashboard(request):
 
@@ -77,17 +45,115 @@ def dashboard(request):
 
     categories = business.categories.all()
 
+    products = Product.objects.filter(
+        category__business=business
+    )
 
     return render(
         request,
         "accounts/dashboard.html",
         {
             "business": business,
-            "categories": categories
+            "categories": categories,
+            "products": products
+        }
+    )
+
+@login_required
+def add_category(request):
+    business = Business.objects.get(owner=request.user)
+
+    form = CategoryForm(request.POST or None)
+
+    if form.is_valid():
+        category = form.save(commit=False)
+        category.business = business
+        category.save()
+        return redirect("dashboard")
+
+    return render(request, "accounts/add_category.html", {
+        "form": form
+    })
+@login_required
+def add_product(request):
+
+    business = Business.objects.get(
+        owner=request.user
+    )
+
+    form = ProductForm(
+        request.POST or None,
+        request.FILES or None
+    )
+
+    if form.is_valid():
+
+        product = form.save(commit=False)
+
+        product.save()
+
+        return redirect("dashboard")
+
+
+    return render(
+        request,
+        "accounts/add_product.html",
+        {
+            "form": form
         }
     )
 @login_required
-def add_category(request):
+def delete_product(request, id):
+
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+    product.delete()
+
+    return redirect("dashboard")
+@login_required
+def edit_product(request, id):
+
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+    form = ProductForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=product
+    )
+
+    if form.is_valid():
+        form.save()
+        return redirect("dashboard")
+
+    return render(
+        request,
+        "accounts/edit_product.html",
+        {
+            "form": form
+        }
+    )
+
+@login_required
+def toggle_product(request, id):
+
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+    product.available = not product.available
+
+    product.save()
+
+    return redirect("dashboard")
+@login_required
+def settings_business(request):
 
     business = get_object_or_404(
         Business,
@@ -95,29 +161,23 @@ def add_category(request):
     )
 
 
-    if request.method == "POST":
+    form = BusinessUpdateForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=business
+    )
 
-        form = CategoryForm(request.POST)
 
-        if form.is_valid():
-            category = form.save(commit=False)
+    if form.is_valid():
 
-            category.business = business
+        form.save()
 
-            category.save()
-
-            return redirect(
-                "dashboard"
-            )
-
-    else:
-
-        form = CategoryForm()
+        return redirect("dashboard")
 
 
     return render(
         request,
-        "accounts/add_category.html",
+        "accounts/settings.html",
         {
             "form": form
         }
