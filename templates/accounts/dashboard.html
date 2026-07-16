@@ -1,92 +1,344 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <title>داشبورد</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>
+{{ business.name }}
+</title>
+
+
+<style>
+
+body{
+    font-family:tahoma;
+    background:#f4f4f4;
+    margin:0;
+}
+
+
+.header{
+    background:#222;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+
+.container{
+    padding:20px;
+}
+
+
+.btn{
+    display:inline-block;
+    background:#222;
+    color:white;
+    padding:8px 15px;
+    border-radius:10px;
+    text-decoration:none;
+    margin:5px;
+}
+
+
+.card{
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    margin:15px 0;
+}
+
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+
+.stat-card{
+    background:white;
+    padding:10px;
+    border-radius:12px;
+    text-align:center;
+}
+
+
+.product{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+
+.price{
+    color:green;
+    font-weight:bold;
+}
+
+
+@media(max-width:700px){
+
+.stats{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+
+</style>
+
+
 </head>
 <body>
 
-<h1>{{ business.name }}</h1>
 
-<p>آدرس: {{ business.address }}</p>
+<div class="header">
 
-<p>تلفن: {{ business.phone }}</p>
 
-<hr>
+{% if business.logo %}
+
+<img src="{{ business.logo.url }}"
+style="
+width:70px;
+height:70px;
+border-radius:50%;
+object-fit:cover;
+">
+
+{% endif %}
+
+
+
+<h1>
+{{ business.name }}
+</h1>
+
 
 <p>
-<a href="/menu/{{ business.slug }}/">
-مشاهده منو
-</a>
+پنل مدیریت کسب‌وکار 👋
 </p>
 
-<p>
-<a href="/qr/{{ business.slug }}/">
-دانلود QR
+
+
+<a class="btn" href="{% url 'settings_business' %}">
+⚙️ تنظیمات
 </a>
-</p>
-<hr>
+
+
+<a class="btn" href="{% url 'menu' business.slug %}">
+👁️ مشاهده منو
+</a>
+
+
+<a class="btn" href="{% url 'qr' business.slug %}">
+📱 QR
+</a>
+
+
+</div>
+
+
+
+<div class="container">
+    <div class="stats">
+
+
+<div class="stat-card">
+
+<h4>
+📂 دسته‌ها
+</h4>
 
 <h2>
-دسته بندی های منو
+{{ total_categories }}
 </h2>
-<hr>
+
+</div>
+
+
+
+<div class="stat-card">
+
+<h4>
+🍔 محصولات
+</h4>
 
 <h2>
-محصولات من
+{{ total_products }}
 </h2>
 
-{% for product in products %}
+</div>
 
-<p>
-{{ product.name }}
--
-{{ product.price }}
-</p>
-<a href="/accounts/delete-product/{{ product.id }}/">
-حذف
-</a>
-<a href="{% url 'toggle_product' product.id %}">
-    {% if product.available %}
-        ناموجود کن ❌
-    {% else %}
-        موجود کن ✅
-    {% endif %}
-</a>
 
-<a href="/accounts/edit-product/{{ product.id }}/">
-ویرایش
-</a>
 
-{% empty %}
+<div class="stat-card">
 
-<p>
-هنوز محصولی ثبت نشده
-</p>
+<h4>
+🟢 موجود
+</h4>
 
-{% endfor %}
+<h2>
+{{ available_products }}
+</h2>
+
+</div>
+
+
+
+<div class="stat-card">
+
+<h4>
+🔴 ناموجود
+</h4>
+
+<h2>
+{{ unavailable_products }}
+</h2>
+
+</div>
+
+
+</div>
+<h2>
+📂 دسته‌بندی‌ها
+</h2>
 
 
 {% for category in categories %}
 
-<p>
+
+<div class="card">
+
+
+<h3>
 {{ category.name }}
-</p>
+</h3>
+
+
+</div>
+
 
 {% empty %}
 
+
+<div class="card">
+
+دسته‌بندی وجود ندارد
+
+</div>
+
+
+{% endfor %}
+<h2>
+🍔 محصولات
+</h2>
+
+
+{% for product in products %}
+
+
+<div class="card">
+
+
+<div class="product">
+
+
+<div>
+    {% if product.image %}
+
+<img src="{{ product.image.url }}"
+style="
+width:80px;
+height:80px;
+border-radius:10px;
+object-fit:cover;
+">
+
+{% endif %}
+
+
+
+<h3>
+{{ product.name }}
+</h3>
+
+
 <p>
-هنوز دسته بندی ساخته نشده
+{{ product.description }}
 </p>
+
+
+<div class="price">
+
+{{ product.price }} تومان
+
+</div>
+</div>
+
+
+
+<div>
+
+
+<a class="btn"
+href="{% url 'edit_product' product.id %}">
+✏️
+</a>
+
+
+
+<a class="btn"
+href="{% url 'delete_product' product.id %}">
+🗑️
+</a>
+
+
+
+<a class="btn"
+href="{% url 'toggle_product' product.id %}">
+
+{% if product.available %}
+
+🔴
+
+{% else %}
+
+🟢
+
+{% endif %}
+
+</a>
+
+
+</div>
+</div>
+
+
+</div>
+
+
+{% empty %}
+
+
+<div class="card">
+
+محصولی وجود ندارد
+
+</div>
+
 
 {% endfor %}
 
 
-<a href="/accounts/add-category/">
-افزودن دسته بندی جدید
-</a>
-<a href="{% url 'settings_business' %}">
-تنظیمات کسب‌وکار ⚙️
-</a>
+
+</div>
+
+
 </body>
+
 </html>

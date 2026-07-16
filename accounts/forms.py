@@ -21,14 +21,12 @@ class CategoryForm(forms.ModelForm):
         fields = [
             "name",
         ]
-        from business.models import Product
 
 
 class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-
         fields = [
             "category",
             "name",
@@ -36,4 +34,15 @@ class ProductForm(forms.ModelForm):
             "price",
             "image",
         ]
-        
+
+
+class BusinessUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Business
+        fields = [
+            "name",
+            "logo",
+            "address",
+            "phone",
+        ]

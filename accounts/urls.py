@@ -57,5 +57,22 @@ path(
     views.settings_business,
     name="settings_business"
 ),
+path(
+    "edit-product/<int:id>/",
+    views.edit_product,
+    name="edit_product"
+),
+
+
+path(
+    "delete-product/<int:id>/",
+    views.delete_product,
+    name="delete_product"
+),
+path(
+    "toggle-product/<int:id>/",
+    views.toggle_product,
+    name="toggle_product"
+),
 ]
 

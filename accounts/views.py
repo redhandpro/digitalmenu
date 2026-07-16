@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
-
 from business.models import Business, Category, Product
-from .forms import BusinessForm, CategoryForm, ProductForm
-
+from .forms import BusinessForm, CategoryForm, ProductForm, BusinessUpdateForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 def register_view(request):
     form = UserCreationForm(request.POST or None)
@@ -43,11 +43,28 @@ def dashboard(request):
         owner=request.user
     )
 
+
     categories = business.categories.all()
+
 
     products = Product.objects.filter(
         category__business=business
     )
+
+
+    total_products = products.count()
+
+
+    available_products = products.filter(
+        available=True
+    ).count()
+
+
+    unavailable_products = products.filter(
+        available=False
+    ).count()
+
+
 
     return render(
         request,
@@ -55,7 +72,11 @@ def dashboard(request):
         {
             "business": business,
             "categories": categories,
-            "products": products
+            "products": products,
+            "total_products": total_products,
+            "available_products": available_products,
+            "unavailable_products": unavailable_products,
+            "total_categories": categories.count(),
         }
     )
 
@@ -182,3 +203,59 @@ def settings_business(request):
             "form": form
         }
     )
+@login_required
+def edit_product(request, id):
+
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+
+    form = ProductForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=product
+    )
+
+
+    if form.is_valid():
+
+        form.save()
+
+        return redirect("dashboard")
+
+
+    return render(
+        request,
+        "accounts/edit_product.html",
+        {
+            "form": form
+        }
+    )
+@login_required
+def delete_product(request, id):
+
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+
+    product.delete()
+
+
+    return redirect("dashboard")
+@login_required
+def toggle_product(request, id):
+
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+    product.available = not product.available
+
+    product.save()
+
+    return redirect("dashboard")

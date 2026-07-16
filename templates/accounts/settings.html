@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>تنظیمات کسب‌وکار</title>
+</head>
+
+<body>
+
+<h2>تنظیمات کسب‌وکار</h2>
+
+<form method="post" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        ذخیره تغییرات
+    </button>
+
+</form>
+
+</body>
+</html>
