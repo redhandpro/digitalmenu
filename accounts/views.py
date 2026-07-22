@@ -38,11 +38,12 @@ def create_business(request):
 @login_required
 def dashboard(request):
 
-    business = get_object_or_404(
-        Business,
-        owner=request.user
-    )
+    business = Business.objects.filter(
+    owner=request.user
+).first()
 
+if not business:
+    return redirect("create_business")
 
     categories = business.categories.all()
 
@@ -258,6 +259,7 @@ def delete_product(request, id):
 
 
     return redirect("dashboard")
+
 @login_required
 def toggle_product(request, id):
 
