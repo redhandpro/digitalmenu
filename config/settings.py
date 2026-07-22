@@ -35,6 +35,9 @@ DEBUG = os.environ.get(
 ALLOWED_HOSTS = [
     "*",
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://digitalmenu-1nbd.onrender.com",
+]
 
 
 # Application definition
