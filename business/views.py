@@ -86,3 +86,8 @@ def qr_image(request, slug):
         buffer.getvalue(),
         content_type="image/png"
     )
+def home(request):
+    return render(
+        request,
+        "business/home.html"
+    )

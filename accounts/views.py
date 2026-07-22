@@ -95,6 +95,7 @@ def add_category(request):
     return render(request, "accounts/add_category.html", {
         "form": form
     })
+
 @login_required
 def add_product(request):
 
@@ -107,10 +108,14 @@ def add_product(request):
         request.FILES or None
     )
 
+    form.fields["category"].queryset = Category.objects.filter(
+        business=business
+    )
+
+
     if form.is_valid():
 
         product = form.save(commit=False)
-
         product.save()
 
         return redirect("dashboard")
@@ -123,24 +128,30 @@ def add_product(request):
             "form": form
         }
     )
+
 @login_required
 def delete_product(request, id):
 
     product = get_object_or_404(
         Product,
-        id=id
+        id=id,
+        categorybusinessowner=request.user
     )
 
     product.delete()
 
     return redirect("dashboard")
+
 @login_required
 def edit_product(request, id):
 
     product = get_object_or_404(
-        Product,
-        id=id
-    )
+    Product,
+    id=id,
+    categorybusinessowner=request.user
+)
+
+
 
     form = ProductForm(
         request.POST or None,
@@ -165,7 +176,8 @@ def toggle_product(request, id):
 
     product = get_object_or_404(
         Product,
-        id=id
+        id=id,
+        categorybusinessowner=request.user
     )
 
     product.available = not product.available
@@ -173,6 +185,7 @@ def toggle_product(request, id):
     product.save()
 
     return redirect("dashboard")
+
 @login_required
 def settings_business(request):
 
@@ -233,6 +246,7 @@ def edit_product(request, id):
             "form": form
         }
     )
+
 @login_required
 def delete_product(request, id):
 
@@ -240,8 +254,6 @@ def delete_product(request, id):
         Product,
         id=id
     )
-
-
     product.delete()
 
 
@@ -259,3 +271,9 @@ def toggle_product(request, id):
     product.save()
 
     return redirect("dashboard")
+def home(request):
+
+    return render(
+        request,
+        "business/home.html"
+    )
