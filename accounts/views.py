@@ -39,33 +39,27 @@ def create_business(request):
 def dashboard(request):
 
     business = Business.objects.filter(
-    owner=request.user
-).first()
+        owner=request.user
+    ).first()
 
-if not business:
-    return redirect("create_business")
+    if not business:
+        return redirect("create_business")
 
     categories = business.categories.all()
-
 
     products = Product.objects.filter(
         category__business=business
     )
 
-
     total_products = products.count()
-
 
     available_products = products.filter(
         available=True
     ).count()
 
-
     unavailable_products = products.filter(
         available=False
     ).count()
-
-
 
     return render(
         request,
@@ -80,7 +74,6 @@ if not business:
             "total_categories": categories.count(),
         }
     )
-
 @login_required
 def add_category(request):
     business = Business.objects.get(owner=request.user)
