@@ -74,6 +74,7 @@ def dashboard(request):
             "total_categories": categories.count(),
         }
     )
+
 @login_required
 def add_category(request):
     business = Business.objects.get(owner=request.user)
