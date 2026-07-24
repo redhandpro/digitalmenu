@@ -211,6 +211,7 @@ def settings_business(request):
             "form": form
         }
     )
+
 @login_required
 def edit_product(request, id):
 
