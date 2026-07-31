@@ -6,19 +6,34 @@ from business.models import Business, Category, Product
 from .forms import BusinessForm, CategoryForm, ProductForm, BusinessUpdateForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import login
 
 def register_view(request):
-    form = UserCreationForm(request.POST or None)
-
-    if form.is_valid():
-        form.save()
-        return redirect("login")
-
-    return render(request, "accounts/register.html", {
-        "form": form
-    }
-                  )
-
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            try:
+                # ذخیره کاربر و لاگین خودکار
+                user = form.save()
+                # برای لاگین خودکار بعد از ثبت‌نام (اختیاری)
+                # login(request, user)
+                messages.success(request, "ثبت‌نام با موفقیت انجام شد! حالا وارد شوید.")
+                return redirect("login")
+            except Exception as e:
+                # در صورت بروز خطا در ذخیره‌سازی
+                messages.error(request, f"خطا در ثبت‌نام: {str(e)}")
+        else:
+            # نمایش خطاهای فرم
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = UserCreationForm()
+    
+    return render(request, "accounts/register.html", {"form": form})
 
 @login_required
 def create_business(request):
