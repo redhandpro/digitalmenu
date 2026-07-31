@@ -75,4 +75,17 @@ path(
     name="toggle_product"
 ),
 ]
+# accounts/urls.py
+from django.urls import path
+from . import views
 
+app_name = 'accounts'
+
+urlpatterns = [
+    # ... مسیرهای قبلی
+    path('categories/', views.manage_categories, name='manage_categories'),
+    path('categories/add/', views.add_category, name='add_category'),
+    path('categories/<int:pk>/edit/', views.edit_category, name='edit_category'),
+    path('categories/<int:pk>/delete/', views.delete_category, name='delete_category'),
+    path('categories/reorder/', views.reorder_categories, name='reorder_categories'),
+]
