@@ -16,7 +16,8 @@ def register_view(request):
 
     return render(request, "accounts/register.html", {
         "form": form
-    })
+    }
+                  )
 
 
 @login_required
@@ -32,7 +33,8 @@ def create_business(request):
 
     return render(request, "accounts/create_business.html", {
         "form": form
-    })
+    }
+                  )
 
 
 @login_required
@@ -89,7 +91,8 @@ def add_category(request):
 
     return render(request, "accounts/add_category.html", {
         "form": form
-    })
+    }
+                  )
 
 @login_required
 def add_product(request):
