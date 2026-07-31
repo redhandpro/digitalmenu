@@ -1,4 +1,4 @@
-در# accounts/forms.py
+
 from django import forms
 from .models import Business, Category, Product  # فقط مدل‌ها را import کنید
 
