@@ -24,18 +24,3 @@
 
 </body>
 </html>
-<!-- templates/accounts/add_category.html -->
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="container mt-4">
-    <h2>{% if is_edit %}ویرایش{% else %}افزودن{% endif %} دسته‌بندی</h2>
-    
-    <form method="post" class="mt-3">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">ذخیره</button>
-        <a href="{% url 'accounts:manage_categories' %}" class="btn btn-secondary">بازگشت</a>
-    </form>
-</div>
-{% endblock %}
