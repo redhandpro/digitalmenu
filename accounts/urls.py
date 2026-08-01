@@ -75,6 +75,12 @@ path(
     name="toggle_product"
 ),
 ]
+
+path(
+    'categories/',
+    views.manage_categories,
+    name='manage_categories'
+),
 # accounts/urls.py
 from django.urls import path
 from . import views

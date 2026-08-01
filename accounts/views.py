@@ -292,4 +292,82 @@ def home(request):
         request,
         "business/home.html"
     )
+    # accounts/views.py
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Business, Category
+from .forms import CategoryForm
+
+# ... سایر ویوهای شما (مانند dashboard, register, login و ...)
+
+@login_required
+def manage_categories(request):
+    """نمایش لیست دسته‌بندی‌های کسب‌وکار جاری"""
+    business = get_object_or_404(Business, owner=request.user)
+    categories = Category.objects.filter(business=business).order_by('name')
     
+    return render(request, 'accounts/manage_categories.html', {
+        'business': business,
+        'categories': categories,
+    })
+
+@login_required
+def add_category(request):
+    """افزودن دسته‌بندی جدید"""
+    business = get_object_or_404(Business, owner=request.user)
+    
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.business = business
+            category.save()
+            messages.success(request, f"دسته‌بندی '{category.name}' اضافه شد!")
+            return redirect('manage_categories')
+    else:
+        form = CategoryForm()
+    
+    return render(request, 'accounts/add_category.html', {
+        'form': form,
+        'business': business,
+    })
+
+@login_required
+def edit_category(request, pk):
+    """ویرایش دسته‌بندی موجود"""
+    business = get_object_or_404(Business, owner=request.user)
+    category = get_object_or_404(Category, pk=pk, business=business)
+    
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"دسته‌بندی '{category.name}' ویرایش شد!")
+            return redirect('manage_categories')
+    else:
+        form = CategoryForm(instance=category)
+    
+    return render(request, 'accounts/add_category.html', {
+        'form': form,
+        'business': business,
+        'category': category,
+        'is_edit': True,
+    })
+
+@login_required
+def delete_category(request, pk):
+    """حذف دسته‌بندی"""
+    business = get_object_or_404(Business, owner=request.user)
+    category = get_object_or_404(Category, pk=pk, business=business)
+    
+    if request.method == 'POST':
+        category_name = category.name
+        category.delete()
+        messages.success(request, f"دسته‌بندی '{category_name}' حذف شد!")
+        return redirect('manage_categories')
+    
+    return render(request, 'accounts/delete_category.html', {
+        'category': category,
+        'business': business,
+    })
