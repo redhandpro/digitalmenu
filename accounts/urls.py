@@ -93,5 +93,4 @@ urlpatterns = [
     path('categories/add/', views.add_category, name='add_category'),
     path('categories/<int:pk>/edit/', views.edit_category, name='edit_category'),
     path('categories/<int:pk>/delete/', views.delete_category, name='delete_category'),
-    path('categories/reorder/', views.reorder_categories, name='reorder_categories'),
 ]

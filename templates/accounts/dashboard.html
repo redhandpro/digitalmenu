@@ -154,6 +154,9 @@ object-fit:cover;
                 <h2>
                     {{ total_categories }}
                 </h2>
+                <a href="{% url 'add_category' %}">
+                    ➕ افزودن دسته‌بندی
+                </a>
 
             </div>
 
@@ -201,14 +204,20 @@ object-fit:cover;
 
 
         </div>
+
         <h2>
             📂 دسته‌بندی‌ها
         </h2>
+
         <a href="{% url 'add_category' %}">
             ➕ افزودن دسته‌بندی
         </a>
 
         {% for category in categories %}
+
+        <a href="{% url 'add_category' %}">
+            ➕ افزودن دسته‌بندی
+        </a>
 
 
         <div class="card">
