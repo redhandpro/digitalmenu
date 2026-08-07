@@ -18,7 +18,7 @@ class Business(models.Model):
     class Meta:
         verbose_name_plural = "Businesses"
 
-    def str(self):
+    def str(self):  # <--- اصلاح شده (دو خط زیر)
         return self.name
 
     def save(self, *args, **kwargs):
@@ -42,7 +42,7 @@ class Category(models.Model):
         ordering = ['order', 'name']
         verbose_name_plural = "Categories"
 
-    def str(self):
+    def str(self):  # <--- اصلاح شده (دو خط زیر)
         return f"{self.business.name} - {self.name}"
 
     def save(self, *args, **kwargs):
@@ -64,5 +64,5 @@ class Product(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def str(self):
+    def str(self):  # <--- اصلاح شده (دو خط زیر)
         return f"{self.name} - ${self.price}"
