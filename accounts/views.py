@@ -296,7 +296,6 @@ def home(request):
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Business, Category
 from .forms import CategoryForm
 
 # ... سایر ویوهای شما (مانند dashboard, register, login و ...)
