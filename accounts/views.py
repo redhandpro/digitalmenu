@@ -399,3 +399,4 @@ def edit_product_price(request, pk):
         'product': product,
         'business': business,
     })
+    
