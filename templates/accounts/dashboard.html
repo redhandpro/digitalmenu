@@ -36,7 +36,7 @@
         .btn {
             display: inline-block;
             background: #222;
-            color: white;
+            color: greenyellow;
             padding: 8px 15px;
             border-radius: 10px;
             text-decoration: none;
@@ -154,9 +154,7 @@ object-fit:cover;
                 <h2>
                     {{ total_categories }}
                 </h2>
-                <a href="{% url 'add_category' %}">
-                    ➕ افزودن دسته‌بندی
-                </a>
+
 
             </div>
 
@@ -214,34 +212,53 @@ object-fit:cover;
         </a>
 
         {% for category in categories %}
+    <li>
+        {{ category.name }}
+
+        <form method="post"
+              action="{% url 'delete_category' category.pk %}"
+              style="display:inline;">
+
+            {% csrf_token %}
+
+            <button type="submit">
+                🗑️ حذف
+            </button>
+
+        </form>
+    </li></div>
+
+        <h2>
+            📂 دسته‌بندی‌ها
+        </h2>
 
         <a href="{% url 'add_category' %}">
             ➕ افزودن دسته‌بندی
         </a>
 
+        {% for category in categories %}
+    <li>
+        {{ category.name }}
 
-        <div class="card">
+        <form method="post"
+              action="{% url 'delete_category' category.pk %}"
+              style="display:inline;">
 
+            {% csrf_token %}
 
-            <h3>
-                {{ category.name }}
-            </h3>
+            <button type="submit">
+                🗑️ حذف
+            </button>
 
+        </form>
+    </li>
+{% empty %}
+    <li>
+        هنوز دسته‌بندی ندارید.
+    </li>
+    
+{% endfor %}
 
-        </div>
-
-
-        {% empty %}
-
-
-        <div class="card">
-
-            دسته‌بندی وجود ندارد
-
-        </div>
-
-
-        {% endfor %}
         <h2>
             🍔 محصولات
         </h2>
