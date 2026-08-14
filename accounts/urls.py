@@ -86,4 +86,7 @@ path(
 path('products/add/', views.add_product, name='add_product'),
 path('products/<int:pk>/edit/', views.edit_product, name='edit_product'),
 path('products/<int:pk>/delete/', views.delete_product, name='delete_product'),
+
+path('products/<int:pk>/edit-price/', views.edit_product_price, name='edit_product_price'),
+
 ]

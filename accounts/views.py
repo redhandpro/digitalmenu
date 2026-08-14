@@ -370,3 +370,32 @@ def delete_category(request, pk):
         'category': category,
         'business': business,
     })
+    
+    
+@login_required  
+def manage_products(request):
+    business = get_object_or_404(Business, owner=request.user)
+    products = Product.objects.filter(category__business=business).order_by('-created_at')
+    
+    return render(request, 'accounts/manage_products.html', {
+        'business': business,
+        'products': products,
+    })
+    
+@login_required
+def edit_product_price(request, pk):
+    business = get_object_or_404(Business, owner=request.user)
+    product = get_object_or_404(Product, pk=pk, category__business=business)
+    
+    if request.method == 'POST':
+        new_price = request.POST.get('price')
+        if new_price:
+            product.price = new_price
+            product.save()
+            messages.success(request, f"قیمت '{product.name}' به {product.price} تومان تغییر کرد!")
+            return redirect('manage_products')
+    
+    return render(request, 'accounts/edit_price.html', {
+        'product': product,
+        'business': business,
+    })

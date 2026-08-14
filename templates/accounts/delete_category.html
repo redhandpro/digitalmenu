@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body text-center">
+            <h3>آیا از حذف دسته‌بندی "{{ category.name }}" اطمینان دارید؟</h3>
+            <p>این عمل غیرقابل بازگشت است!</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">بله، حذف کن</button>
+                <a href="{% url 'manage_categories' %}" class="btn btn-secondary">انصراف</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

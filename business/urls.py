@@ -28,4 +28,6 @@ path(
     name="qr_image"
 ),
 
+path('menu/', views.menu_view, name='menu'),
+
 ]
