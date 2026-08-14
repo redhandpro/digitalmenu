@@ -34,6 +34,11 @@ urlpatterns = [
         name="add_product"
     ),
 
+path(
+    "delete-category/<int:pk>/",
+    views.delete_category,
+    name="delete_category"
+),
 
 path(
     "delete-product/<int:id>/",
@@ -74,10 +79,16 @@ path(
     views.toggle_product,
     name="toggle_product"
 ),
-]
+
 
 path(
     'categories/',
     views.manage_categories,
     name='manage_categories'
 ),
+
+path('products/', views.manage_products, name='manage_products'),
+path('products/add/', views.add_product, name='add_product'),
+path('products/<int:pk>/edit/', views.edit_product, name='edit_product'),
+path('products/<int:pk>/delete/', views.delete_product, name='delete_product'),
+]
