@@ -92,7 +92,7 @@ def home(request):
         "business/home.html"
     )
      
-def menu_view(request):
+def menu_view(request,slug):
     business = Business.objects.first()
     categories = Category.objects.filter(business=business, is_active=True).order_by('order', 'name')
     
