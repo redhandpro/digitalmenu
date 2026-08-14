@@ -203,62 +203,40 @@ object-fit:cover;
 
         </div>
 
-        <h2>
-            📂 دسته‌بندی‌ها
-        </h2>
+       <h2>
+    📂 دسته‌بندی‌ها
+</h2>
 
-        <a href="{% url 'add_category' %}">
-            ➕ افزودن دسته‌بندی
-        </a>
+<a href="{% url 'add_category' %}">
+    ➕ افزودن دسته‌بندی
+</a>
 
-        {% for category in categories %}
-    <li>
-        {{ category.name }}
+<ul>
+    {% for category in categories %}
+        <li>
+            {{ category.name }}
 
-        <form method="post"
-              action="{% url 'delete_category' category.pk %}"
-              style="display:inline;">
+            <form method="post"
+                  action="{% url 'delete_category' category.pk %}"
+                  style="display:inline;">
 
-            {% csrf_token %}
+                {% csrf_token %}
 
-            <button type="submit">
-                🗑️ حذف
-            </button>
+                <button type="submit">
+                    🗑️ حذف
+                </button>
 
-        </form>
-    </li></div>
+            </form>
+        </li>
 
-        <h2>
-            📂 دسته‌بندی‌ها
-        </h2>
+    {% empty %}
 
-        <a href="{% url 'add_category' %}">
-            ➕ افزودن دسته‌بندی
-        </a>
+        <li>
+            هنوز دسته‌بندی ندارید.
+        </li>
 
-        {% for category in categories %}
-    <li>
-        {{ category.name }}
-
-        <form method="post"
-              action="{% url 'delete_category' category.pk %}"
-              style="display:inline;">
-
-            {% csrf_token %}
-
-            <button type="submit">
-                🗑️ حذف
-            </button>
-
-        </form>
-    </li>
-{% empty %}
-    <li>
-        هنوز دسته‌بندی ندارید.
-    </li>
-    
-{% endfor %}
-
+    {% endfor %}
+</ul>
         <h2>
             🍔 محصولات
         </h2>
