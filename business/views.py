@@ -91,23 +91,5 @@ def home(request):
         request,
         "business/home.html"
     )
-     
-def menu_view(request,slug):
-    business = Business.objects.first()
-    categories = Category.objects.filter(business=business, is_active=True).order_by('order', 'name')
     
-    category_id = request.GET.get('category')
-    if category_id:
-        products = Product.objects.filter(category_id=category_id, available=True)
-        selected_category = get_object_or_404(Category, id=category_id)
-    else:
-        products = Product.objects.filter(category__business=business, available=True)
-        selected_category = None
     
-    context = {
-        'business': business,
-        'categories': categories,
-        'products': products,
-        'selected_category': selected_category,
-    }
-    return render(request, 'business/menu.html', context)
