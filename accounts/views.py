@@ -111,37 +111,27 @@ def add_category(request):
 
 @login_required
 def add_product(request):
-
-    business = Business.objects.get(
-        owner=request.user
-    )
-
-    form = ProductForm(
-        request.POST or None,
-        request.FILES or None
-    )
-
-    form.fields["category"].queryset = Category.objects.filter(
-        business=business
-    )
-
-
-    if form.is_valid():
-
-        product = form.save(commit=False)
-        product.save()
-
-        return redirect("dashboard")
-
-
-    return render(
-        request,
-        "accounts/add_product.html",
-        {
-            "form": form
-        }
-    )
-
+    business = get_object_or_404(Business, owner=request.user)
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.save()
+            messages.success(request, f"محصول '{product.name}' اضافه شد!")
+            return redirect('manage_products')
+        else:
+            messages.error(request, "خطا در ثبت محصول. لطفاً دوباره تلاش کنید.")
+    else:
+        form = ProductForm()
+        # فقط دسته‌بندی‌های همین کسب‌وکار را نشان بده
+        form.fields['category'].queryset = Category.objects.filter(business=business)
+    
+    return render(request, 'accounts/add_product.html', {
+        'form': form,
+        'business': business,
+    })
+    
 @login_required
 def delete_product(request, id):
 
