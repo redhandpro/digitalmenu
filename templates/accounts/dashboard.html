@@ -154,6 +154,9 @@ object-fit:cover;
                 <h2>
                     {{ total_categories }}
                 </h2>
+                  <a href="{% url 'add_category' %}" class="btn btn-success">
+            ➕ افزودن دسته‌بندی
+        </a>
 
 
             </div>
@@ -165,7 +168,6 @@ object-fit:cover;
                 <h4>
                     🍔 محصولات
                 </h4>
-                <a href="{% url 'add_product' %}" class="btn btn-success">+ افزودن محصول</a>
 
                 <h2>
                     {{ total_products }}
@@ -208,7 +210,7 @@ object-fit:cover;
             📂 دسته‌بندی‌ها
         </h2>
 
-        <a href="{% url 'add_category' %}">
+        <a href="{% url 'add_category' %}" class="btn btn-success">
             ➕ افزودن دسته‌بندی
         </a>
 
@@ -239,8 +241,9 @@ object-fit:cover;
         </ul>
         <h2>
             🍔 محصولات
-            <a href="{% url 'add_product' %}" class="btn btn-success">+ افزودن محصول</a>
         </h2>
+        <a href="{% url 'add_product' %}" class="btn btn-success">+ افزودن محصول</a>
+
 
 
         {% for product in products %}
