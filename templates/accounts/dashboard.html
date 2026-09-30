@@ -2,346 +2,522 @@
 <html lang="fa" dir="rtl">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل مدیریت {{ business.name }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <meta charset="UTF-8">
+    body {
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #f7f1e8 0%, #e8dccb 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      color: #3d2b1f;
+    }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    .menu-container {
+      width: 100%;
+      max-width: 900px;
+      background: #fffaf3;
+      border-radius: 24px;
+      padding: 30px 24px;
+      box-shadow: 0 20px 50px rgba(92, 60, 30, 0.15), 0 4px 12px rgba(92, 60, 30, 0.08);
+      border: 1px solid rgba(200, 170, 130, 0.3);
+    }
 
-    <title>
-        {{ business.name }}
-    </title>
+    .menu-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px dashed #d9c4a9;
+    }
 
+    .menu-header h1 {
+      font-size: 26px;
+      color: #6b4423;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
 
-    <style>
-        body {
-            font-family: tahoma;
-            background: #f4f4f4;
-            margin: 0;
-        }
+    .menu-header p {
+      font-size: 13px;
+      color: #a08868;
+    }
 
+    .menu-header .coffee-icon {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 8px;
+    }
 
-        .header {
-            background: #277;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
+    /* دکمه‌های بالای داشبورد */
+    .top-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
 
+    .top-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      background: #fff;
+      border: 1px solid #efe3d3;
+      border-radius: 12px;
+      color: #6b4423;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
 
-        .container {
-            padding: 20px;
-        }
+    .top-actions a:hover {
+      background: #fdf6ec;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(140, 100, 60, 0.1);
+    }
 
+    /* کارت‌های آماری */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
 
-        .btn {
-            display: inline-block;
-            background: #222;
-            color: greenyellow;
-            padding: 8px 15px;
-            border-radius: 10px;
-            text-decoration: none;
-            margin: 5px;
-        }
+    .stat-card {
+      background: #fff;
+      border: 1px solid #efe3d3;
+      border-radius: 16px;
+      padding: 18px 14px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
 
+    .stat-card:hover {
+      box-shadow: 0 6px 18px rgba(140, 100, 60, 0.1);
+      transform: translateY(-2px);
+    }
 
-        .card {
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            margin: 15px 0;
-        }
+    .stat-card .stat-label {
+      font-size: 12px;
+      color: #a89179;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
 
+    .stat-card .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #6b4423;
+    }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
+    /* دسته‌بندی */
+    .category {
+      margin-bottom: 14px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid #efe3d3;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
 
+    .category:hover {
+      box-shadow: 0 6px 18px rgba(140, 100, 60, 0.1);
+    }
 
-        .stat-card {
-            background: white;
-            padding: 10px;
-            border-radius: 12px;
-            text-align: center;
-        }
+    .category.active {
+      box-shadow: 0 8px 24px rgba(140, 100, 60, 0.15);
+    }
 
+    .category-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
 
-        .product {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .category-header:hover {
+      background: #fdf6ec;
+    }
 
+    .category-icon {
+      font-size: 22px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5e6d3 0%, #ecd9be 100%);
+      border-radius: 12px;
+      margin-left: 14px;
+      transition: transform 0.3s ease;
+    }
 
-        .price {
-            color: green;
-            font-weight: bold;
-        }
+    .category.active .category-icon {
+      transform: scale(1.1) rotate(-5deg);
+    }
 
+    .category-title {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 600;
+      color: #4a3423;
+    }
 
-        @media(max-width:700px) {
+    .category-count {
+      font-size: 12px;
+      color: #b09a80;
+      background: #f5ede1;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 10px;
+    }
 
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
+    .arrow {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b08d63;
+      font-size: 11px;
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
 
-        }
-    </style>
+    .category.active .arrow {
+      transform: rotate(180deg);
+    }
 
+    .category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
+    .category.active .category-content {
+      max-height: 1000px;
+    }
+
+    .items-list {
+      list-style: none;
+      padding: 4px 14px 14px;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 12px;
+      transition: background 0.25s ease, transform 0.25s ease;
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    .category.active .item {
+      animation: slideIn 0.4s ease forwards;
+    }
+
+    .category.active .item:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .category.active .item:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .category.active .item:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .category.active .item:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+
+    .category.active .item:nth-child(5) {
+      animation-delay: 0.25s;
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .item:hover {
+      background: #fdf1e0;
+      transform: translateX(-4px);
+    }
+
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a3423;
+    }
+
+    .item-desc {
+      font-size: 11px;
+      color: #a89179;
+    }
+
+    .item-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: #8b5a2b;
+      background: #f7ecdd;
+      padding: 5px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .item-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .item-actions .edit-btn {
+      background: #f7ecdd;
+      color: #8b5a2b;
+    }
+
+    .item-actions .edit-btn:hover {
+      background: #8b5a2b;
+      color: #fff;
+    }
+
+    .item-actions .delete-btn {
+      background: #fce8e8;
+      color: #c94f4f;
+    }
+
+    .item-actions .delete-btn:hover {
+      background: #c94f4f;
+      color: #fff;
+    }
+
+    .item-actions .price-btn {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .item-actions .price-btn:hover {
+      background: #2e7d32;
+      color: #fff;
+    }
+
+    .add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #8b5a2b;
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background: #6b4423;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(140, 100, 60, 0.25);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .section-header h2 {
+      font-size: 18px;
+      color: #6b4423;
+      font-weight: 700;
+    }
+
+    .menu-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 2px dashed #d9c4a9;
+      font-size: 12px;
+      color: #a08868;
+    }
+
+    .menu-footer span {
+      color: #c94f4f;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .item {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-
-    <div class="header">
-
-
-        {% if business.logo %}
-
-        <img src="{{ business.logo.url }}" style="
-width:70px;
-height:70px;
-border-radius:50%;
-object-fit:cover;
-">
-
-        {% endif %}
-
-
-
-        <h1>
-            {{ business.name }}
-        </h1>
-
-
-        <p>
-            پنل مدیریت کسب‌وکار 👋
-        </p>
-
-
-
-        <a class="btn" href="{% url 'settings_business' %}">
-            ⚙️ تنظیمات
-        </a>
-
-
-        <a class="btn" href="{% url 'menu' business.slug %}">
-            👁️ مشاهده منو
-        </a>
-
-
-        <a class="btn" href="{% url 'qr' business.slug %}">
-            📱 QR
-        </a>
-
-
+  <div class="menu-container">
+    <div class="menu-header">
+      <span class="coffee-icon">☕</span>
+      <h1>{{ business.name }}</h1>
+      <p>پنل مدیریت کسب‌وکار</p>
     </div>
 
+    <!-- دکمه‌های بالای داشبورد -->
+    <div class="top-actions">
+      <a href="/menu/{{ business.slug }}/">
+        👁️ مشاهده منو
+      </a>
+      <a href="#">
+        ⚙️ تنظیمات
+      </a>
+      <a href="/menu/{{ business.slug }}/qr/">
+        📱 QR کد
+      </a>
+    </div>
 
+    <!-- کارت‌های آماری -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">📦 محصولات</div>
+        <div class="stat-value">{{ total_products }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">✅ موجود</div>
+        <div class="stat-value">{{ available_products }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">❌ ناموجود</div>
+        <div class="stat-value">{{ unavailable_products }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">📂 دسته‌بندی‌ها</div>
+        <div class="stat-value">{{ total_categories }}</div>
+      </div>
+    </div>
 
-    <div class="container">
-        <div class="stats">
+    <!-- بخش دسته‌بندی‌ها و محصولات -->
+    <div class="section-header">
+      <h2>📂 دسته‌بندی‌ها و محصولات</h2>
+      <a href="{% url 'add_category' %}" class="add-btn">+ دسته‌بندی جدید</a>
+    </div>
 
-
-            <div class="stat-card">
-
-                <h4>
-                    📂 دسته‌ها
-                </h4>
-                <a href="{% url 'add_category' %}" class="btn btn-success">
-                    ➕ افزودن دسته‌بندی
-                </a>
-
-                <h2>
-                    {{ total_categories }}
-                </h2>
-
-
-
+    {% for category in categories %}
+    <div class="category {% if forloop.first %}active{% endif %}">
+      <div class="category-header">
+        <div class="category-icon">{{ category.icon|default:"📁" }}</div>
+        <span class="category-title">{{ category.name }}</span>
+        <span class="category-count">{{ category.products.count }} آیتم</span>
+        <div class="arrow">▼</div>
+      </div>
+      <div class="category-content">
+        <ul class="items-list">
+          {% for product in category.products.all %}
+          <li class="item">
+            <div class="item-info">
+              <span class="item-name">{{ product.name }}</span>
+              <span class="item-desc">{{ product.description|truncatechars:40|default:"بدون توضیحات" }}</span>
             </div>
-
-
-
-            <div class="stat-card">
-
-                <h4>
-                    🍔 محصولات
-                </h4>
-                <a href="{% url 'add_product' %}" class="btn btn-success">+ افزودن محصول</a>
-
-
-                <h2>
-                    {{ total_products }}
-                </h2>
-
-
+            <span class="item-price">{{ product.price }} تومان</span>
+            <div class="item-actions">
+              <a href="{% url 'edit_product' product.id %}" class="edit-btn" title="ویرایش">✏️</a>
+              <a href="{% url 'edit_product_price' product.id %}" class="price-btn" title="ویرایش قیمت">💰</a>
+              <a href="{% url 'delete_product' product.id %}" class="delete-btn" title="حذف">🗑️</a>
             </div>
-
-
-
-            <div class="stat-card">
-
-                <h4>
-                    🟢 موجود
-                </h4>
-
-                <h2>
-                    {{ available_products }}
-                </h2>
-
-            </div>
-
-
-
-            <div class="stat-card">
-
-                <h4>
-                    🔴 ناموجود
-                </h4>
-
-                <h2>
-                    {{ unavailable_products }}
-                </h2>
-
-            </div>
-
-
-        </div>
-
-        <h2>
-            📂 دسته‌بندی‌ها
-        </h2>
-
-
-
-        <ul>
-            {% for category in categories %}
-            <li>
-                {{ category.name }}
-
-                <form method="post" action="{% url 'delete_category' category.pk %}" style="display:inline;">
-
-                    {% csrf_token %}
-
-                    <button type="submit">
-                        🗑️ حذف
-                    </button>
-
-                </form>
-            </li>
-
-            {% empty %}
-
-            <li>
-                هنوز دسته‌بندی ندارید.
-            </li>
-
-            {% endfor %}
-
+          </li>
+          {% empty %}
+          <li class="item" style="justify-content: center;">
+            <span class="item-desc">هیچ محصولی در این دسته‌بندی وجود ندارد</span>
+          </li>
+          {% endfor %}
         </ul>
-        <h2>
-            🍔 محصولات
-        </h2>
-
-
-
-        {% for product in products %}
-
-
-        <div class="card">
-
-
-            <div class="product">
-
-
-                <div>
-                    {% if product.image %}
-
-                    <img src="{{ product.image.url }}" style="
-width:80px;
-height:80px;
-border-radius:10px;
-object-fit:cover;
-">
-
-                    {% endif %}
-
-
-
-                    <h3>
-                        {{ product.name }}
-                    </h3>
-
-
-                    <p>
-                        {{ product.description }}
-                    </p>
-
-
-                    <div class="price">
-
-                        {{ product.price }} تومان
-
-                    </div>
-                </div>
-
-
-
-                <div>
-
-
-                    <a class="btn" href="{% url 'edit_product' product.id %}">
-                        ✏️
-                    </a>
-
-
-
-                    <a class="btn" href="{% url 'delete_product' product.id %}">
-                        🗑️
-                    </a>
-
-
-
-                    <a class="btn" href="{% url 'toggle_product' product.id %}">
-
-                        {% if product.available %}
-
-                        🔴
-
-                        {% else %}
-
-                        🟢
-
-                        {% endif %}
-
-                    </a>
-
-
-                </div>
-            </div>
-
-
+        <div style="padding: 8px 14px 14px; text-align: center;">
+          <a href="{% url 'add_product' %}?category={{ category.id }}" class="add-btn"
+            style="font-size: 12px; padding: 6px 14px;">
+            + افزودن محصول به {{ category.name }}
+          </a>
         </div>
-
-
-        {% empty %}
-
-
-        <div class="card">
-
-            محصولی وجود ندارد
-
-        </div>
-
-
-        {% endfor %}
-
-
-
+      </div>
     </div>
+    {% empty %}
+    <div class="category" style="text-align: center; padding: 30px;">
+      <p style="color: #a08868;">هنوز هیچ دسته‌بندی ایجاد نشده است.</p>
+      <a href="{% url 'add_category' %}" class="add-btn" style="margin-top: 12px;">+ ایجاد اولین دسته‌بندی</a>
+    </div>
+    {% endfor %}
 
+    <div class="menu-footer">
+      ساخته شده با <span>♥</span> برای مدیریت بهتر کسب‌وکار
+    </div>
+  </div>
+
+  <script>
+    const headers = document.querySelectorAll('.category-header');
+
+    headers.forEach(header => {
+      header.addEventListener('click', () => {
+        const currentItem = header.parentElement;
+        const isOpen = currentItem.classList.contains('active');
+
+        document.querySelectorAll('.category').forEach(cat => {
+          cat.classList.remove('active');
+        });
+
+        if (!isOpen) {
+          currentItem.classList.add('active');
+        }
+      });
+    });
+  </script>
 
 </body>
 

@@ -10,6 +10,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login
+from django.db.models import Count, Q
 
 def register_view(request):
     if request.method == 'POST':
@@ -50,47 +51,28 @@ def create_business(request):
         "form": form
     }
                   )
-
-
+    
 @login_required
 def dashboard(request):
-
-    business = Business.objects.filter(
-        owner=request.user
-    ).first()
-
-    if not business:
-        return redirect("create_business")
-
-    categories = business.categories.all()
-
-    products = Product.objects.filter(
-        category__business=business
-    )
-
+    business = get_object_or_404(Business, owner=request.user)
+    categories = business.categories.annotate(
+    product_count=Count('products')
+).order_by('name')
+    products = Product.objects.filter(category__business=business)
+    
     total_products = products.count()
-
-    available_products = products.filter(
-        available=True
-    ).count()
-
-    unavailable_products = products.filter(
-        available=False
-    ).count()
-
-    return render(
-        request,
-        "accounts/dashboard.html",
-        {
-            "business": business,
-            "categories": categories,
-            "products": products,
-            "total_products": total_products,
-            "available_products": available_products,
-            "unavailable_products": unavailable_products,
-            "total_categories": categories.count(),
-        }
-    )
+    available_products = products.filter(available=True).count()
+    unavailable_products = products.filter(available=False).count()
+    
+    context = {
+        'business': business,
+        'categories': categories,
+        'total_products': total_products,
+        'available_products': available_products,
+        'unavailable_products': unavailable_products,
+        'total_categories': categories.count(),
+    }
+    return render(request, 'accounts/dashboard.html', context)
 
 @login_required
 def add_category(request):

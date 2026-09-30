@@ -1,5 +1,13 @@
+# business/urls.py
 from django.urls import path
 from . import views
+
+app_name = 'business'  # ← این خط باید وجود داشته باشد
+
+urlpatterns = [
+    path('menu/<slug:slug>/', views.menu_view, name='menu'),
+    # سایر مسیرها
+]
 
 
 urlpatterns = [

@@ -9,6 +9,8 @@ urlpatterns = [
     path('', include('business.urls')),
     path('accounts/', include('accounts.urls')),
     path("accounts/", include("django.contrib.auth.urls")),
+    path('', include('business.urls')),  # اگر app_name نداشته باشد، namespace ندارد
+path('', include(('business.urls', 'business'), namespace='business')),  # اگر namespace دارد
 ]
 
 
