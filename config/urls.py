@@ -1,21 +1,16 @@
-from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # هدایت صفحه اصلی به لاگین
+    path('', RedirectView.as_view(url='/accounts/login/', permanent=False)),
+    
+    # مسیرهای اپ business
     path('', include('business.urls')),
+    
+    # مسیرهای اپ accounts
     path('accounts/', include('accounts.urls')),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path('', include('business.urls')),  # اگر app_name نداشته باشد، namespace ندارد
-path('', include(('business.urls', 'business'), namespace='business')),  # اگر namespace دارد
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )

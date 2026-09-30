@@ -39,3 +39,8 @@ path(
 path('menu/', views.menu_view, name='menu'),
 
 ]
+# business/urls.py
+urlpatterns = [
+    # ...
+    path('qr/<slug:slug>/', views.qr_view, name='qr'),
+]
