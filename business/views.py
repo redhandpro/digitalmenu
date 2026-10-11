@@ -69,3 +69,21 @@ def qr_image(request, slug):
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     return HttpResponse(buffer.getvalue(), content_type="image/png")
+# business/views.py (انتهای فایل)
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
+@login_required
+def setup_business(request):
+    """یه بار برای ساخت سریع کسب‌وکار - بعداً حذفش کن"""
+    business, created = Business.objects.get_or_create(
+        owner=request.user,
+        defaults={
+            'name': f'کسب‌وکار {request.user.username}',
+            'slug': f'biz-{request.user.username}',
+        }
+    )
+    if created:
+        return HttpResponse(f"✅ کسب‌وکار ساخته شد: {business.name} | slug: {business.slug}")
+    else:
+        return HttpResponse(f"ℹ️ قبلاً داشتی: {business.name} | slug: {business.slug}")

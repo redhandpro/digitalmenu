@@ -4,6 +4,7 @@ from . import views
 app_name = "business"
 
 urlpatterns = [
+    
     path(
         "",
         views.home,
@@ -27,4 +28,6 @@ urlpatterns = [
         views.qr_image,
         name="qr_image"
     ),
+        # ... مسیرهای قبلی ...
+    path('setup-business/', views.setup_business, name='setup_business'),
 ]
