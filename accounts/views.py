@@ -38,20 +38,39 @@ def register_view(request):
 
 @login_required
 def create_business(request):
-    form = BusinessForm(request.POST or None, request.FILES or None)
-
-    if form.is_valid():
-        business = form.save(commit=False)
-        business.owner = request.user
-        business.slug = slugify(business.name)
-        business.save()
-        return redirect("dashboard")
-
-    return render(request, "accounts/create_business.html", {
-        "form": form
-    }
-                  )
+    # اگه کاربر قبلاً کسب‌وکار داره
+    if Business.objects.filter(owner=request.user).exists():
+        messages.info(request, "شما قبلاً کسب‌وکار دارید.")
+        return redirect('dashboard')
     
+    if request.method == 'POST':
+        form = BusinessForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                business = form.save(commit=False)
+                business.owner = request.user
+                
+                # ساخت slug یکتا
+                base_slug = slugify(business.name)
+                slug = base_slug
+                counter = 1
+                while Business.objects.filter(slug=slug).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                business.slug = slug
+                
+                business.save()
+                messages.success(request, f"کسب‌وکار '{business.name}' ساخته شد!")
+                return redirect('dashboard')
+            except Exception as e:
+                messages.error(request, f"خطا در ساخت کسب‌وکار: {e}")
+        else:
+            messages.error(request, "فرم نامعتبر است. لطفاً دوباره پر کنید.")
+    else:
+        form = BusinessForm()
+    
+    return render(request, 'accounts/create_business.html', {'form': form})
+
 @login_required
 def dashboard(request):
     business = get_object_or_404(Business, owner=request.user)

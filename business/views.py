@@ -34,21 +34,38 @@ def menu_view(request, slug):
 
 
 def qr_view(request, slug):
-    """نمایش صفحه QR کد"""
+    """صفحه‌ای که QR کد و لینک منو رو نشون میده"""
     business = get_object_or_404(Business, slug=slug)
-    return render(request, 'business/qr.html', {'business': business})
+    # ساخت لینک کامل منو
+    menu_url = request.build_absolute_uri(f'/menu/{business.slug}/')
+    
+    context = {
+        'business': business,
+        'menu_url': menu_url,
+    }
+    return render(request, 'business/qr.html', context)
 
 
 def qr_image(request, slug):
-    """تولید تصویر QR"""
+    """تولید و برگرداندن تصویر QR اختصاصی برای هر کسب‌وکار"""
     business = get_object_or_404(Business, slug=slug)
+    
+    # لینک اختصاصی منوی این کسب‌وکار
     menu_url = request.build_absolute_uri(f'/menu/{business.slug}/')
     
-    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    # ساخت QR
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=4,
+    )
     qr.add_data(menu_url)
     qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
     
+    img = qr.make_image(fill_color="#6b4423", back_color="white")
+    
+    # برگرداندن تصویر
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     return HttpResponse(buffer.getvalue(), content_type="image/png")
