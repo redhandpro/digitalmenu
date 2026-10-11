@@ -71,19 +71,34 @@ def qr_image(request, slug):
     return HttpResponse(buffer.getvalue(), content_type="image/png")
 # business/views.py (انتهای فایل)
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.http import HttpResponse
 
 @login_required
 def setup_business(request):
     """یه بار برای ساخت سریع کسب‌وکار - بعداً حذفش کن"""
-    business, created = Business.objects.get_or_create(
+    # اگه کاربر قبلاً کسب‌وکار داره، همون رو نشون بده
+    existing = Business.objects.filter(owner=request.user).first()
+    
+    if existing:
+        return HttpResponse(
+            f"ℹ️ شما قبلاً کسب‌وکار دارید:<br>"
+            f"نام: {existing.name}<br>"
+            f"slug: <a href='/qr/{existing.slug}/'>{existing.slug}</a><br><br>"
+            f"<a href='/accounts/dashboard/'>برو به داشبورد</a>"
+        )
+    
+    # ساخت کسب‌وکار جدید
+    username = request.user.username
+    business = Business.objects.create(
         owner=request.user,
-        defaults={
-            'name': f'کسب‌وکار {request.user.username}',
-            'slug': f'biz-{request.user.username}',
-        }
+        name=f"کسب‌وکار {username}",
+        slug=f"biz-{username}",
     )
-    if created:
-        return HttpResponse(f"✅ کسب‌وکار ساخته شد: {business.name} | slug: {business.slug}")
-    else:
-        return HttpResponse(f"ℹ️ قبلاً داشتی: {business.name} | slug: {business.slug}")
+    
+    return HttpResponse(
+        f"✅ کسب‌وکار ساخته شد!<br>"
+        f"نام: {business.name}<br>"
+        f"slug: <b>{business.slug}</b><br><br>"
+        f"<a href='/qr/{business.slug}/'>مشاهده QR کد</a><br>"
+        f"<a href='/accounts/dashboard/'>برو به داشبورد</a>"
+    )
